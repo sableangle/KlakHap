@@ -25,10 +25,10 @@ namespace KlakHap
             // Convert UTF-8 to wide character for Windows
             int wlen = MultiByteToWideChar(CP_UTF8, 0, path, -1, nullptr, 0);
             if (wlen <= 0) return;
-            
+
             wchar_t* wpath = new wchar_t[wlen];
             MultiByteToWideChar(CP_UTF8, 0, path, -1, wpath, wlen);
-            
+
             if (_wfopen_s(&file_, wpath, L"rb") != 0) {
                 delete[] wpath;
                 return;
