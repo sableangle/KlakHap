@@ -29,9 +29,11 @@ Desktop.ini
 xcuserdata
 xcshareddata
 
+/Plugin/build-*
 /Plugin/MacOS/arm64
 /Plugin/MacOS/x86_64
 /Plugin/MacOS/*.bundle
+/Plugin/*.bundle
 /*.tgz
 
 /Assets/StreamingAssets/*.mov

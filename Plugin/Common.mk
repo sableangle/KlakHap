@@ -56,8 +56,11 @@ endif
 # Compiler/linker options
 #
 
-CFLAGS += -O2 -Wall -std=c++17 -ISnappy -IHap -IMP4 -IUnity
+CFLAGS += -O2 -Wall -ISnappy -IHap -IMP4 -IUnity
 CFLAGS += -Wextra -Wno-switch -Wno-unknown-pragmas
+
+CXXFLAGS = $(CFLAGS) -std=c++17
+CFLAGS += -fpermissive
 
 #
 # Building rules
@@ -82,13 +85,13 @@ $(OBJ_DIR)/lib$(PRODUCT).so: $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -fpermissive -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(OBJ_DIR)/%.o: %.cc | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CXXFLAGS) -c -o $@ $<
 
 $(OBJ_DIR)/%.o: %.cpp | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CXXFLAGS) -c -o $@ $<
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
