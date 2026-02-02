@@ -3,6 +3,7 @@ ARCH = x86_64
 TARGET_TYPE = so
 
 CFLAGS = -fPIC -ffunction-sections -fdata-sections
+CXXFLAGS = -fPIC -ffunction-sections -fdata-sections
 LDFLAGS = -shared -Wl,--gc-sections
 
 include Common.mk
