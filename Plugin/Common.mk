@@ -48,6 +48,10 @@ ifeq ($(origin CC),default)
   CC = clang
 endif
 
+ifeq ($(origin CXX),default)
+  CXX = clang++
+endif
+
 ifndef STRIP
   STRIP = strip
 endif
@@ -56,11 +60,9 @@ endif
 # Compiler/linker options
 #
 
-CFLAGS += -O2 -Wall -ISnappy -IHap -IMP4 -IUnity
-CFLAGS += -Wextra -Wno-switch -Wno-unknown-pragmas
-
-CXXFLAGS = $(CFLAGS) -std=c++17
-CFLAGS += -fpermissive
+CPPFLAGS += -ISnappy -IHap -IMP4 -IUnity
+CFLAGS += -O2 -Wall -Wextra
+CXXFLAGS += -O2 -Wall -Wextra -std=c++17
 
 #
 # Building rules
@@ -75,23 +77,23 @@ copy: $(TARGET)
 	cp $(TARGET) ../Packages/jp.keijiro.klak.hap/Plugin/$(PLATFORM)
 
 $(OBJ_DIR)/$(PRODUCT).dll: $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
 	$(STRIP) $@
 
 $(OBJ_DIR)/lib$(PRODUCT).dylib: $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 $(OBJ_DIR)/lib$(PRODUCT).so: $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
 $(OBJ_DIR)/%.o: %.cc | $(OBJ_DIR)
-	$(CC) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 $(OBJ_DIR)/%.o: %.cpp | $(OBJ_DIR)
-	$(CC) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)

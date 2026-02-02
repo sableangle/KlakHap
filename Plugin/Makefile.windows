@@ -3,7 +3,8 @@ ARCH = x86_64
 TARGET_TYPE = dll
 
 TOOLCHAIN = $(ARCH)-w64-mingw32
-CC = $(TOOLCHAIN)-g++-posix
+CC = $(TOOLCHAIN)-gcc-posix
+CXX = $(TOOLCHAIN)-g++-posix
 STRIP = $(TOOLCHAIN)-strip
 
 LDFLAGS = -shared

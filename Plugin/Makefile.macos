@@ -1,10 +1,11 @@
 PLATFORM = macOS
-TARGET_TYPE = so
+TARGET_TYPE = dylib
 
 SDK_MIN_VER = 11.0
-CFLAGS += -arch $(ARCH) -mmacosx-version-min=$(SDK_MIN_VER)
-LDFLAGS += -arch $(ARCH) -mmacosx-version-min=$(SDK_MIN_VER) -dynamiclib $(SO_ARGS)
+ARCH_OPT = -arch $(ARCH) -mmacosx-version-min=$(SDK_MIN_VER)
 
-LIBS = -lc++
+CFLAGS   += $(ARCH_OPT)
+CXXFLAGS += $(ARCH_OPT)
+LDFLAGS  += $(ARCH_OPT) -dynamiclib
 
 include Common.mk
