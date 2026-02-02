@@ -61,8 +61,8 @@ endif
 #
 
 CPPFLAGS += -ISnappy -IHap -IMP4 -IUnity
-CFLAGS += -O2 -Wall -Wextra -Wno-sign-compare
-CXXFLAGS += -O2 -Wall -Wextra -Wno-unused-parameter -Wno-switch -std=c++17
+CFLAGS += -O2 -Wall -Wextra -Wno-sign-compare -Wno-implicit-fallthrough
+CXXFLAGS += -O2 -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unknown-pragmas -std=c++17
 
 #
 # Building rules
