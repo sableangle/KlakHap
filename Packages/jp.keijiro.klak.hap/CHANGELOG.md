@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-02-05
+
+### Added
+
+- Added a Unity 6.3 demo scene updated for URP and UI Toolkit.
+- Added runtime tests and a test data downloader for Hap, HapQ, and HapAlpha assets.
+
+### Changed
+
+- Updated HAP and Snappy source code and refreshed native plugin binaries.
+- Migrated Windows builds to MinGW and refactored the native build pipelines and Makefiles.
+
+### Fixed
+
+- Fixed a Windows crash when paths contain Japanese characters. (PR #49)
+- Fixed obsolete ShaderUtil API usage in the editor code.
+
 ## [0.1.20] - 2021-12-03
 
 ### Added

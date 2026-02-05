@@ -1,14 +1,16 @@
 {
   "name": "jp.keijiro.klak.hap",
-  "version": "0.1.20",
+  "version": "1.0.0",
   "displayName": "KlakHAP",
   "description": "HAP video player",
-  "unity": "2019.3",
+  "unity": "2022.3",
   "author": "Keijiro Takahashi",
-  "dependencies": { },
+  "dependencies": {},
   "changelogUrl": "https://github.com/keijiro/KlakHap/blob/master/CHANGELOG.md",
   "documentationUrl": "https://github.com/keijiro/KlakHap",
   "licensesUrl": "https://github.com/keijiro/KlakHap/blob/master/LICENSE",
   "license": "SEE LICENSE IN LICENSE",
-  "_upm": { "changelog": "" }
+  "_upm": {
+    "changelog": "<b>Added</b><br>- Added a Unity 6.3 demo scene updated for URP and UI Toolkit.<br>- Added runtime tests and a test data downloader for Hap, HapQ, and HapAlpha assets.<br><br><b>Changed</b><br>- Updated HAP and Snappy source code and refreshed native plugin binaries.<br>- Migrated Windows builds to MinGW and refactored the native build pipelines and Makefiles.<br><br><b>Fixed</b><br>- Fixed a Windows crash when paths contain Japanese characters. (PR #49)<br>- Fixed obsolete ShaderUtil API usage in the editor code."
+  }
 }
