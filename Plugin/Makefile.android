@@ -1,0 +1,84 @@
+PLATFORM = Android
+TARGET_TYPE = so
+
+# Android NDK configuration
+ifndef ANDROID_NDK_ROOT
+  ANDROID_NDK_ROOT = $(ANDROID_HOME)/ndk-bundle
+endif
+
+# Android API level
+ANDROID_API = 21
+
+# Android-specific source files
+EXTRA_SOURCES = Source/AndroidConverter.cpp
+
+# Architecture configuration
+ifndef ARCH
+  ARCH = arm64-v8a
+endif
+
+# Toolchain setup based on architecture
+ifeq ($(ARCH), arm64-v8a)
+  ANDROID_ABI = arm64-v8a
+  TARGET_HOST = aarch64-linux-android
+  ANDROID_ARCH = arm64
+else ifeq ($(ARCH), armeabi-v7a)
+  ANDROID_ABI = armeabi-v7a
+  TARGET_HOST = armv7a-linux-androideabi
+  ANDROID_ARCH = arm
+else ifeq ($(ARCH), x86_64)
+  ANDROID_ABI = x86_64
+  TARGET_HOST = x86_64-linux-android
+  ANDROID_ARCH = x86_64
+else ifeq ($(ARCH), x86)
+  ANDROID_ABI = x86
+  TARGET_HOST = i686-linux-android
+  ANDROID_ARCH = x86
+endif
+
+# NDK toolchain paths
+TOOLCHAIN_ROOT = $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/darwin-x86_64
+SYSROOT = $(TOOLCHAIN_ROOT)/sysroot
+
+# Compiler and tools
+CC = $(TOOLCHAIN_ROOT)/bin/$(TARGET_HOST)$(ANDROID_API)-clang
+CXX = $(TOOLCHAIN_ROOT)/bin/$(TARGET_HOST)$(ANDROID_API)-clang++
+AR = $(TOOLCHAIN_ROOT)/bin/llvm-ar
+STRIP = $(TOOLCHAIN_ROOT)/bin/llvm-strip
+
+# Compiler flags
+CFLAGS = -fPIC \
+         -ffunction-sections \
+         -fdata-sections \
+         -fstack-protector-strong \
+         -no-canonical-prefixes \
+         -Wformat \
+         -Werror=format-security
+
+CXXFLAGS = -fPIC \
+           -ffunction-sections \
+           -fdata-sections \
+           -fstack-protector-strong \
+           -no-canonical-prefixes \
+           -Wformat \
+           -Werror=format-security
+
+# Architecture specific flags
+ifeq ($(ARCH), armeabi-v7a)
+  CFLAGS += -march=armv7-a -mfpu=vfpv3-d16 -mfloat-abi=softfp
+  CXXFLAGS += -march=armv7-a -mfpu=vfpv3-d16 -mfloat-abi=softfp
+endif
+
+# Linker flags
+LDFLAGS = -shared \
+          -Wl,--no-undefined \
+          -Wl,-z,noexecstack \
+          -Wl,-z,relro \
+          -Wl,-z,now \
+          -Wl,--gc-sections \
+          -Wl,-z,max-page-size=16384
+
+# Libraries
+LIBS = -llog -landroid
+
+include Common.mk

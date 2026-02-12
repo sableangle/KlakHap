@@ -5,7 +5,7 @@
 #include <vector>
 #include "ReadBuffer.h"
 #include "hap.h"
-#include "iOSConverter.h"
+#include "PlatformConverter.h"
 
 namespace KlakHap
 {
@@ -18,10 +18,10 @@ namespace KlakHap
         Decoder(int width, int height, int typeID)
             : width_(width), height_(height), typeID_(typeID)
         {
-            if (iOS::ShouldUseFormatConversion())
+            if (Platform::ShouldUseFormatConversion())
             {
-                // For iOS, allocate RGBA32 buffer
-                buffer_.resize(iOS::GetRGBA32BufferSize(width, height));
+                // For mobile platforms, allocate RGBA32 buffer
+                buffer_.resize(Platform::GetRGBA32BufferSize(width, height));
                 // Allocate temporary DXT buffer for HAP decoding
                 dxtBuffer_.resize(width * height * GetBppFromTypeID(typeID) / 8);
             }
@@ -62,7 +62,7 @@ namespace KlakHap
 
             unsigned int format;
 
-            if (iOS::ShouldUseFormatConversion())
+            if (Platform::ShouldUseFormatConversion())
             {
                 // Decode HAP to DXT format first
                 HapDecode(
@@ -74,11 +74,11 @@ namespace KlakHap
                     nullptr, &format
                 );
                 
-                // Convert DXT to RGBA32 for iOS
+                // Convert DXT to RGBA32 for mobile platforms
                 int formatType = typeID_ & 0xf;
                 if (formatType == 0xb)  // DXT1
                 {
-                    iOS::ConvertDXT1ToRGBA32(
+                    Platform::ConvertDXT1ToRGBA32(
                         dxtBuffer_.data(), 
                         buffer_.data(), 
                         width_, height_
@@ -86,7 +86,7 @@ namespace KlakHap
                 }
                 else if (formatType == 0xe || formatType == 0xf)  // DXT5/YCoCg
                 {
-                    iOS::ConvertDXT5ToRGBA32(
+                    Platform::ConvertDXT5ToRGBA32(
                         dxtBuffer_.data(), 
                         buffer_.data(), 
                         width_, height_
