@@ -37,10 +37,10 @@ namespace Klak.Hap
 
         #region Native plugin entry points
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern IntPtr KlakHap_CreateReadBuffer();
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern void KlakHap_DestroyReadBuffer(IntPtr buffer);
 
         #endregion

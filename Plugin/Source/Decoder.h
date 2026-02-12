@@ -5,6 +5,7 @@
 #include <vector>
 #include "ReadBuffer.h"
 #include "hap.h"
+#include "iOSConverter.h"
 
 namespace KlakHap
 {
@@ -15,8 +16,20 @@ namespace KlakHap
         #pragma region Constructor/destructor
 
         Decoder(int width, int height, int typeID)
+            : width_(width), height_(height), typeID_(typeID)
         {
-            buffer_.resize(width * height * GetBppFromTypeID(typeID) / 8);
+            if (iOS::ShouldUseFormatConversion())
+            {
+                // For iOS, allocate RGBA32 buffer
+                buffer_.resize(iOS::GetRGBA32BufferSize(width, height));
+                // Allocate temporary DXT buffer for HAP decoding
+                dxtBuffer_.resize(width * height * GetBppFromTypeID(typeID) / 8);
+            }
+            else
+            {
+                // Standard DXT buffer
+                buffer_.resize(width * height * GetBppFromTypeID(typeID) / 8);
+            }
         }
 
         #pragma endregion
@@ -49,14 +62,49 @@ namespace KlakHap
 
             unsigned int format;
 
-            HapDecode(
-                input.storage.data(),
-                static_cast<unsigned long>(input.storage.size()),
-                0, hap_callback, nullptr,
-                buffer_.data(),
-                static_cast<unsigned long>(buffer_.size()),
-                nullptr, &format
-            );
+            if (iOS::ShouldUseFormatConversion())
+            {
+                // Decode HAP to DXT format first
+                HapDecode(
+                    input.storage.data(),
+                    static_cast<unsigned long>(input.storage.size()),
+                    0, hap_callback, nullptr,
+                    dxtBuffer_.data(),
+                    static_cast<unsigned long>(dxtBuffer_.size()),
+                    nullptr, &format
+                );
+                
+                // Convert DXT to RGBA32 for iOS
+                int formatType = typeID_ & 0xf;
+                if (formatType == 0xb)  // DXT1
+                {
+                    iOS::ConvertDXT1ToRGBA32(
+                        dxtBuffer_.data(), 
+                        buffer_.data(), 
+                        width_, height_
+                    );
+                }
+                else if (formatType == 0xe || formatType == 0xf)  // DXT5/YCoCg
+                {
+                    iOS::ConvertDXT5ToRGBA32(
+                        dxtBuffer_.data(), 
+                        buffer_.data(), 
+                        width_, height_
+                    );
+                }
+            }
+            else
+            {
+                // Standard HAP decoding
+                HapDecode(
+                    input.storage.data(),
+                    static_cast<unsigned long>(input.storage.size()),
+                    0, hap_callback, nullptr,
+                    buffer_.data(),
+                    static_cast<unsigned long>(buffer_.size()),
+                    nullptr, &format
+                );
+            }
         }
 
         #pragma endregion
@@ -66,7 +114,9 @@ namespace KlakHap
         #pragma region Internal-use members
 
         std::vector<uint8_t> buffer_;
+        std::vector<uint8_t> dxtBuffer_;  // Temporary DXT buffer for iOS conversion
         std::mutex bufferLock_;
+        int width_, height_, typeID_;
 
         static size_t GetBppFromTypeID(int typeID)
         {

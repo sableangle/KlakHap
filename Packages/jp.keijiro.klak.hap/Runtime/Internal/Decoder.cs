@@ -120,25 +120,25 @@ namespace Klak.Hap
 
         #region Native plugin entry points
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern IntPtr KlakHap_CreateDecoder(int width, int height, int typeID);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern void KlakHap_DestroyDecoder(IntPtr decoder);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern void KlakHap_AssignDecoder(uint id, IntPtr decoder);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern void KlakHap_DecodeFrame(IntPtr decoder, IntPtr input);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern IntPtr KlakHap_LockDecoderBuffer(IntPtr decoder);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern void KlakHap_UnlockDecoderBuffer(IntPtr decoder);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern int KlakHap_GetDecoderBufferSize(IntPtr decoder);
 
         #endregion

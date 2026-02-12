@@ -69,7 +69,7 @@ namespace Klak.Hap
 
         #region Native plugin entry points
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern IntPtr KlakHap_GetTextureUpdateCallback();
 
         #endregion

@@ -25,8 +25,8 @@ dynamically without hiccups.
 
 - Unity 2022.3 or later
 
-Currently, KlakHap supports only 64-bit desktop platforms (Windows, macOS, and
-Linux).
+Currently, KlakHap supports 64-bit desktop platforms (Windows, macOS, and
+Linux) and mobile platforms (iOS).
 
 # Supported formats
 

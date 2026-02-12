@@ -71,31 +71,31 @@ namespace Klak.Hap
 
         #region Native plugin entry points
 
-        [DllImport("KlakHap", CharSet = CharSet.Ansi)]
+        [DllImport(NativeLibrary.Name, CharSet = CharSet.Ansi)]
         internal static extern IntPtr KlakHap_OpenDemuxer([MarshalAs(UnmanagedType.LPUTF8Str)] string filepath);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern void KlakHap_CloseDemuxer(IntPtr demuxer);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern int KlakHap_DemuxerIsValid(IntPtr demuxer);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern int KlakHap_CountFrames(IntPtr demuxer);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern double KlakHap_GetDuration(IntPtr demuxer);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern int KlakHap_GetVideoWidth(IntPtr demuxer);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern int KlakHap_GetVideoHeight(IntPtr demuxer);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern int KlakHap_AnalyzeVideoType(IntPtr demuxer);
 
-        [DllImport("KlakHap")]
+        [DllImport(NativeLibrary.Name)]
         internal static extern void KlakHap_ReadFrame(IntPtr demuxer, int frameNumber, IntPtr buffer);
 
         #endregion

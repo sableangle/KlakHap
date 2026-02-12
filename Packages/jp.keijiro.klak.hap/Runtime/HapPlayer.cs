@@ -152,7 +152,7 @@ namespace Klak.Hap
             // Texture initialization
             _texture = new Texture2D(
                 _demuxer.Width, _demuxer.Height,
-                Utility.DetermineTextureFormat(_demuxer.VideoType), false
+                Utility.DetermineTextureFormat(_demuxer.VideoType, _demuxer.Width, _demuxer.Height), false
             );
             _texture.wrapMode = TextureWrapMode.Clamp;
             _texture.hideFlags = HideFlags.DontSave;

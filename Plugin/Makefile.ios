@@ -1,0 +1,66 @@
+PLATFORM = iOS
+TARGET_TYPE = a
+
+# iOS SDK configuration
+IPHONE_SDKROOT = $(shell xcrun --sdk iphoneos --show-sdk-path)
+SIMULATOR_SDKROOT = $(shell xcrun --sdk iphonesimulator --show-sdk-path)
+
+# iOS deployment target
+IOS_MIN_VER = 12.0
+
+# iOS-specific source files  
+EXTRA_SOURCES = Source/iOSConverter.cpp
+
+# Architecture configuration
+ifdef ARCH
+  # Single architecture build
+  ifeq ($(ARCH), arm64)
+    SDKROOT = $(IPHONE_SDKROOT)
+    ARCH_OPT = -arch $(ARCH) -isysroot $(SDKROOT) -mios-version-min=$(IOS_MIN_VER)
+  else ifeq ($(ARCH), x86_64)
+    SDKROOT = $(SIMULATOR_SDKROOT)
+    ARCH_OPT = -arch $(ARCH) -isysroot $(SDKROOT) -mios-simulator-version-min=$(IOS_MIN_VER)
+  endif
+
+  # Compiler flags for iOS
+  CFLAGS   += $(ARCH_OPT) -fembed-bitcode-marker
+  CXXFLAGS += $(ARCH_OPT) -fembed-bitcode-marker
+
+  # iOS specific flags
+  CFLAGS   += -fno-common -ffunction-sections -fdata-sections
+  CXXFLAGS += -fno-common -ffunction-sections -fdata-sections
+
+  include Common.mk
+
+else
+  # Universal binary (fat library) - build both architectures
+  ARCH = universal
+  ARM64_OBJ_DIR = build-$(PLATFORM)-arm64
+  X86_64_OBJ_DIR = build-$(PLATFORM)-x86_64
+  UNIVERSAL_TARGET = build-$(PLATFORM)-$(ARCH)/lib$(PRODUCT).$(TARGET_TYPE)
+
+  # For universal build, we only define the product name
+  PRODUCT = KlakHap
+
+  all: $(UNIVERSAL_TARGET)
+
+  $(UNIVERSAL_TARGET): $(ARM64_OBJ_DIR)/lib$(PRODUCT).$(TARGET_TYPE) $(X86_64_OBJ_DIR)/lib$(PRODUCT).$(TARGET_TYPE)
+	@mkdir -p $(dir $@)
+	lipo -create $^ -output $@
+	@echo "Created universal library: $@"
+
+  $(ARM64_OBJ_DIR)/lib$(PRODUCT).$(TARGET_TYPE):
+	$(MAKE) -f Makefile.ios ARCH=arm64
+
+  $(X86_64_OBJ_DIR)/lib$(PRODUCT).$(TARGET_TYPE):
+	$(MAKE) -f Makefile.ios ARCH=x86_64
+
+  copy: $(UNIVERSAL_TARGET)
+	@mkdir -p ../Packages/jp.keijiro.klak.hap/Plugin/$(PLATFORM)
+	cp $(UNIVERSAL_TARGET) ../Packages/jp.keijiro.klak.hap/Plugin/$(PLATFORM)
+
+  clean:
+	rm -rf $(ARM64_OBJ_DIR) $(X86_64_OBJ_DIR) build-$(PLATFORM)-$(ARCH)
+
+  .PHONY: all clean copy
+endif

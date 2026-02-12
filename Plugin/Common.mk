@@ -13,7 +13,7 @@ SRCS_CC = Snappy/snappy-c.cc \
 	      Snappy/snappy.cc
 vpath %.cc Snappy
 
-SRCS_CPP = Source/KlakHap.cpp
+SRCS_CPP = Source/KlakHap.cpp $(EXTRA_SOURCES)
 vpath %.cpp Source
 
 SRCS = $(SRCS_C) $(SRCS_CC) $(SRCS_CPP)
@@ -85,6 +85,9 @@ $(OBJ_DIR)/lib$(PRODUCT).dylib: $(OBJS)
 
 $(OBJ_DIR)/lib$(PRODUCT).so: $(OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(OBJ_DIR)/lib$(PRODUCT).a: $(OBJS)
+	$(AR) rcs $@ $^
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
