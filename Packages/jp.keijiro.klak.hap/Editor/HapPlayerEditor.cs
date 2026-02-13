@@ -9,6 +9,7 @@ namespace Klak.Hap
     {
         SerializedProperty _filePath;
         SerializedProperty _pathMode;
+        SerializedProperty _hapAsset;
 
         SerializedProperty _time;
         SerializedProperty _speed;
@@ -59,6 +60,7 @@ namespace Klak.Hap
         {
             _filePath = serializedObject.FindProperty("_filePath");
             _pathMode = serializedObject.FindProperty("_pathMode");
+            _hapAsset = serializedObject.FindProperty("_hapAsset");
 
             _time = serializedObject.FindProperty("_time");
             _speed = serializedObject.FindProperty("_speed");
@@ -85,6 +87,7 @@ namespace Klak.Hap
 
             // Source file
             EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(_hapAsset);
             EditorGUILayout.DelayedTextField(_filePath);
             EditorGUILayout.PropertyField(_pathMode);
             reload = EditorGUI.EndChangeCheck();
