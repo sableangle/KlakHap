@@ -3,7 +3,7 @@ TARGET_TYPE = so
 
 # Android NDK configuration
 ifndef ANDROID_NDK_ROOT
-  ANDROID_NDK_ROOT = $(ANDROID_HOME)/ndk-bundle
+  ANDROID_NDK_ROOT = /Applications/Unity/Hub/Editor/6000.3.8f1/PlaybackEngines/AndroidPlayer/NDK
 endif
 
 # Android API level

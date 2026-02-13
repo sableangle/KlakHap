@@ -153,11 +153,11 @@ namespace KlakHap
                     const uint8_t* blockData = dxtData + (by * blocksX + bx) * 16;
                     uint8_t* blockOutput = rgbaData + (by * 4 * width + bx * 4) * 4;
                     
-                    // Decompress alpha block (first 8 bytes)
-                    DecompressDXT5AlphaBlock(blockData, blockOutput, width * 4);
-                    
-                    // Decompress color block (last 8 bytes) 
+                    // Decompress color block first (last 8 bytes) 
                     DecompressDXT1Block(blockData + 8, blockOutput, width * 4);
+                    
+                    // Then decompress alpha block (first 8 bytes) - this overwrites alpha only
+                    DecompressDXT5AlphaBlock(blockData, blockOutput, width * 4);
                 }
             }
         }

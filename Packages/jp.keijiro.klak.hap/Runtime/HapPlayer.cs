@@ -20,6 +20,7 @@ namespace Klak.Hap
 
         [SerializeField] PathMode _pathMode = PathMode.StreamingAssets;
         [SerializeField] string _filePath = "";
+        [SerializeField] TextAsset _hapAsset = null;
 
         [SerializeField] float _time = 0;
         [SerializeField, Range(-10, 10)] float _speed = 1;
@@ -61,6 +62,11 @@ namespace Klak.Hap
         public string targetMaterialProperty {
             get { return _targetMaterialProperty; }
             set { _targetMaterialProperty = value; }
+        }
+
+        public TextAsset hapAsset {
+            get { return _hapAsset; }
+            set { _hapAsset = value; }
         }
 
         #endregion
@@ -278,8 +284,19 @@ namespace Klak.Hap
             _lastUpdateFrameCount = Time.frameCount;
 
             // Lazy initialization of demuxer
-            if (_demuxer == null && !string.IsNullOrEmpty(_filePath))
-                OpenInternal();
+            if (_demuxer == null)
+            {
+                if (_hapAsset != null)
+                {
+                    // Use hapAsset if available
+                    this.Open(_hapAsset);
+                }
+                else if (!string.IsNullOrEmpty(_filePath))
+                {
+                    // Fall back to file path
+                    OpenInternal();
+                }
+            }
 
             // Do nothing if the demuxer hasn't been instantiated.
             if (_demuxer == null) return;

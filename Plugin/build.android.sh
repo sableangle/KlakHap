@@ -10,7 +10,11 @@ cd "$SCRIPT_DIR"
 
 # Check if Android NDK is available
 if [ -z "$ANDROID_NDK_ROOT" ]; then
-  if [ -n "$ANDROID_HOME" ] && [ -d "$ANDROID_HOME/ndk-bundle" ]; then
+  # Try Unity NDK first
+  UNITY_NDK="/Applications/Unity/Hub/Editor/6000.3.8f1/PlaybackEngines/AndroidPlayer/NDK"
+  if [ -d "$UNITY_NDK" ]; then
+    export ANDROID_NDK_ROOT="$UNITY_NDK"
+  elif [ -n "$ANDROID_HOME" ] && [ -d "$ANDROID_HOME/ndk-bundle" ]; then
     export ANDROID_NDK_ROOT="$ANDROID_HOME/ndk-bundle"
   elif [ -n "$ANDROID_HOME" ]; then
     # Try to find latest NDK version
@@ -22,7 +26,7 @@ if [ -z "$ANDROID_NDK_ROOT" ]; then
       exit 1
     fi
   else
-    echo "Error: ANDROID_HOME or ANDROID_NDK_ROOT must be set."
+    echo "Error: No Android NDK found. Please install Unity Android Build Support or set ANDROID_NDK_ROOT."
     exit 1
   fi
 fi

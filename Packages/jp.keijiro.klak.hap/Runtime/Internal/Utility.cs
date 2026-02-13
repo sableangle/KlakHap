@@ -42,9 +42,9 @@ namespace Klak.Hap
 
         public static TextureFormat DetermineTextureFormat(int videoType, int width = 0, int height = 0)
         {
-            // For iOS, always use RGBA32 when native conversion is available
-            #if UNITY_IOS && !UNITY_EDITOR
-                Debug.Log($"[KlakHap] iOS: Using RGBA32 format with native DXT conversion for video type 0x{(videoType & 0xf):x}");
+            // For mobile platforms, always use RGBA32 when native conversion is available
+            #if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
+                Debug.Log($"[KlakHap] {Application.platform}: Using RGBA32 format with native DXT conversion for video type 0x{(videoType & 0xf):x}");
                 return TextureFormat.RGBA32;
             #else
             
